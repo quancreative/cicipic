@@ -1,0 +1,71 @@
+{
+  "name": "ciciPic",
+  "version": "1.0.0",
+  "description": "https://www.electronjs.org/docs/latest/tutorial/tutorial-packaging",
+  "main": "main.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development electron --inspect=5858 .",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "quan.h.ngo@gmail.com",
+  "license": "ISC",
+  "build": {
+    "appId": "ciciPic",
+    "fileAssociations": [
+      {
+        "ext": "png",
+        "name": "PNG File",
+        "role": "Viewer"
+      },
+      {
+        "ext": [
+          "jpg",
+          "jpeg"
+        ],
+        "name": "JPG File",
+        "role": "Viewer"
+      },
+      {
+        "ext": "gif",
+        "name": "GIF File",
+        "role": "Viewer"
+      },
+      {
+        "ext": "tiff",
+        "name": "TIFF File",
+        "role": "Viewer"
+      }
+    ],
+    "nsis": {
+      "perMachine": true
+    }
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "chokidar": "^3.5.3",
+    "cross-env": "^7.0.3",
+    "drag-drop": "^7.2.0",
+    "electron-log": "^4.4.8",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.1.0",
+    "esm": "^3.2.25",
+    "filesize": "^10.0.7",
+    "fs-extra": "^11.1.1",
+    "is-image": "^3.1.0",
+    "open": "^9.1.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.1.1",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
+    "@electron-forge/publisher-github": "^6.1.1",
+    "devtron": "^1.4.0",
+    "electron": "^24.1.3",
+    "electron-reloader": "^1.2.3"
+  }
+}
