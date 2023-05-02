@@ -1,0 +1,5 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+.start-95 {
+    left: 95%!important;
+}
