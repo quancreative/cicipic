@@ -1,5 +1,25 @@
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../components/fontawesome-free-6.4.0-web/css/all.css";
 
-.start-95 {
-    left: 95%!important;
+body{background-color: #151920;}
+h1{width: auto}
+#main{background-color: #1d222e; min-height: 500px;}
+
+header button.btn{ background-color: transparent; border: none}
+.top-bar { width: 100%; height: 100%; overflow: hidden; background-color: #151920; border: 1px solid #060708; -webkit-box-sizing: border-box; }
+.top-bar svg{fill: white;}
+.top-bar > .title-bar { -webkit-app-region: drag; }
+
+.start-95 { left: 95%!important;}
+
+
+#main-img-nav .arrow { fill: white;    position: absolute;    left: 10px;    top: 10px;}
+#main-img-nav .disabled .arrow { fill: #1d222e;  }
+aside{background-color: #151920; color: #9ca3b3;}
+.btn.active {background-color: #6188ff;}
+.btn-round{    background: rgba(66,66,66,.54);    border-radius: 28px;    cursor: pointer;    /*position: absolute;*/    /*top: 50%;*/    /*margin-top: -28px;*/    height: 56px;    width: 56px;    color: #6188ff;}
+.btn-round.btn-sm{    height: 35px;    width: 35px;    padding: 0;}
+.me-6-5 {
+    margin-right: 4.5rem!important;
 }
+.fs-7{font-size: .75rem !important;}

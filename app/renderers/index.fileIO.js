@@ -14,7 +14,7 @@ let dropArea = document.getElementById('main')
 })
 
 dropArea.addEventListener('drop', handleDrop, false)
-dropArea.classList.add('border')
+// dropArea.classList.add('border')
 function handleDrop(e) {
     let filePathList = [];
     // const data = e.dataTransfer.getData("text/plain");

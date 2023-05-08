@@ -1,6 +1,7 @@
 
 const information = document.getElementById('info')
-const mainLogoElem = document.getElementById('main-img');
+const mainImg = document.getElementById('main-img');
+const imgFolder = document.getElementById('img-folder') // @ Image Info Side bar
 
 information.innerText = `This app is using Chrome (v${api.chrome()}), Node.js (v${api.node()}), and Electron (v${api.electron()})`
 // let src = `${api.mainImgSrc()}`
@@ -10,7 +11,7 @@ const func = async () => {
     console.log(response) // prints out 'pong'
     // let getMainImgSrcRes = await window.api.getMainImgSrc().then( res => {
     //     console.log(res);
-    //     mainLogoElem.src = res
+    //     mainImg.src = res
     //
     // }).catch(e => {
     //     console.log(e)
@@ -22,12 +23,27 @@ const func = async () => {
 func().then()
 
 let sendToMain = (event) => {
-    window.api.send("toMain", event, mainLogoElem.src);
+    window.api.send("toMain", event, mainImg.src);
 }
 
 let updateMainDisplay = (data) => {
-    let imgSrc = data.currentFile.path;
-    mainLogoElem.src = imgSrc
+    if(data.currentFile.hasOwnProperty('path'), data.currentFile.path){
+        let imgSrc = data.currentFile.path
+        mainImg.src = imgSrc
+        document.getElementById('main-form').classList.add('d-none')
+        document.getElementById('main-img-nav').classList.remove('d-none')
+        document.getElementById('img-filename').textContent = data.currentFile.name // @ <header />
+        document.getElementById('img-name').textContent = data.currentFile.name // @ Info side bar
+        imgFolder.textContent = data.currentFile.pwd // @ Info side bar
+        imgFolder.href = data.currentFile.pwd
+    } else {
+        document.getElementById('main-form').classList.remove('d-none')
+        document.getElementById('main-img-nav').classList.add('d-none')
+        document.getElementById('img-filename').textContent = ''
+        document.getElementById('img-name').textContent = ''
+        imgFolder.textContent = ''
+        imgFolder.href = ''
+    }
 }
 
 let getAllImageInFileList = (files) => {
@@ -69,13 +85,13 @@ window.api.receive("fromMain", (data) => {
 let onPreImgBtnClick = e => {
     e.preventDefault()
     console.log('prevImgBtn pressed');
-    sendToMain("onPrevImgBtnClick", mainLogoElem.src);
+    sendToMain("onPrevImgBtnClick", mainImg.src);
 }
 let prevImgBtn = document.getElementById('prevImgBtn').addEventListener('click', onPreImgBtnClick)
 // let nextImgBtn = document.getElementById('nextImgBtn').addEventListener('click', e => window.api.send("toMain", "onNextImgBtnClick"))
 let nextImgBtn = document.getElementById('nextImgBtn').addEventListener('click', e => {
     e.preventDefault()
-    window.api.nextImage(mainLogoElem.src)
+    window.api.nextImage(mainImg.src)
 })
 
 /**
@@ -97,3 +113,12 @@ const getIndexOfObjectInArray = (objProperty, objValue, arr) => {
     return index
 }
 
+/**
+ * @param path
+ * @param filename
+ * @returns {*}
+ * @credit https://stackoverflow.com/a/68001349
+ */
+let getImgFolder = (path, filename) => {
+    return path.replace(filename, '').replace(/\/+$/, ''); // Remove last slash from string;
+}

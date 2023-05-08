@@ -13,11 +13,6 @@ const log = require('electron-log');
 const {addFileWatch} = require("./components/io");
 const {notify} = require("./components/notification");
 
-ipcMain.on('open-file', (event, filePath) => {
-    log.info(event);
-    log.info('open-file filepath', filePath);
-});
-
 
 // fs.readFile(p, 'utf8', function (err, data) {
 //     if (err) return console.log(err);
@@ -112,6 +107,7 @@ let AppController = {
         win.setMenuBarVisibility(true);
     }
 }
+
 async function createWindow (){
 
     // protocol.registerFileProtocol('file', (request, callback) => {
@@ -199,24 +195,71 @@ let onCreatedWindow = (createdWin) => {
     }
 }
 
-app.whenReady().then(() => {
+let onWindReady = () => {
     createWindow().then( onCreatedWindow).catch()
-
+    
     // addFileWatch(win)
     log.info('process.argv', process.argv);
-
+    
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow().then(onCreatedWindow).catch()
         }
     })
-
+    
     registerIPCEvents()
     // createGlobalShortcut(AppController)
-})
+}
 
+// app.whenReady().then(onWindReady)
+
+/**
+ * Only one single instance. 
+ * activating the window of primary instance when a second instance starts:
+ * 
+ * @see https://stackoverflow.com/a/52633637
+ * @see https://github.com/electron/electron/blob/main/docs/api/app.md
+ */
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+    app.quit()
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (win) {
+            if (win.isMinimized()) win.restore()
+            win.focus()
+        }
+    })
+        
+    // Create myWindow, load the rest of the app, etc...
+    app.whenReady().then(onWindReady)
+}
+
+/**
+ * Mac only. Fires when double click on external file
+ */
 app.on('open-file', (event, url) => {
+    log.info('open-file', url)
     log.info(event, url)
+    event.preventDefault();
+    if (win === null) {
+        // create the main window here
+        // this is usually done on app.on("ready")
+        // but this event fires before "ready"
+    }
+    // if you already had a mainWindow or just finished
+    // creating it for the first time then handle the file
+    let file = null;
+    let openFilePath = null;
+    if (process.platform == "win32" && process.argv.length >= 2) {
+        openFilePath = process.argv[1];
+    }
+    if (process.platform == "darwin") {
+        openFilePath = path;
+    }
+    file = fs.readFileSync(openFilePath, "utf-8");
+    // now do stuff with the file such as sending it to the renderer
 })
 
 app.on('window-all-closed', () => {
@@ -225,7 +268,7 @@ app.on('window-all-closed', () => {
 })
 
 /**
- * Call by index.fileIO.js when user click on Browse button.
+ * Call by index.fileIO.js when user click on Browse button on index.html.
  */
 ipcMain.on('onFileDrop', (event, files) => {
     const webContents = event.sender

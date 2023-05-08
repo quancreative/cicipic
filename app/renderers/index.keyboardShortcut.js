@@ -16,7 +16,7 @@ function onKeyUp (event) {
     switch (event.key){
         case 'ArrowRight' :
             event.preventDefault()
-            window.api.nextImage(mainLogoElem.src)
+            window.api.nextImage(mainImg.src)
             break;
         case 'ArrowLeft' :
             event.preventDefault()

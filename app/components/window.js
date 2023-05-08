@@ -14,6 +14,8 @@ const defaults = {
     // y: 0,
     // width: 4920,
     // height: 3080,
+    minWidth: 600,
+    minHeight: 300,
     // maximized: true,
     // overlayScrollbars: true,
     // resizable: true,
@@ -24,13 +26,14 @@ const defaults = {
     // toolbar: true,
     // transparent: false,
     // fullscreen: true,
-    // frame: true,
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-        color: '#2f3241',
-        symbolColor: '#74b1be',
-        height: 32
-    },
+    // frame: false,
+    // devTools: true,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: {
+    //     color: '#2f3241',
+    //     symbolColor: '#74b1be',
+    //     height: 32
+    // },
     show: false,
     darkTheme: true,
     webPreferences: {
@@ -130,7 +133,7 @@ export function createMainWindow(file, settings = {}) {
     if (process.env.NODE_ENV === 'development') {
         win.webContents.openDevTools()
     }
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
 
     return win;
 }
