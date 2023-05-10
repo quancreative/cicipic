@@ -83,6 +83,8 @@ const DragScroll = {
         document.addEventListener('mousedown', this.mouseDownHandler);
     },
     mouseDownHandler: function(e) {
+        if(e.button != 0) return;
+
         e.preventDefault()
         this.pos = {
             // The current scroll

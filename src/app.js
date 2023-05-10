@@ -8,7 +8,7 @@ const os = require("os");
 const fs = require("fs");
 const {readDir} = require("./components/readdir");
 const {getNextImageFile, getPrevImageFile, getFileInfoByPath, isFistFileOfTheList, isLastFileOfTheList} = require("./components/utilities");
-const {createGlobalShortcut} = require("./components/globalShortcut");
+// const {createGlobalShortcut} = require("./components/globalShortcut");
 const log = require('electron-log');
 const {addFileWatch} = require("./components/io");
 const {notify} = require("./components/notification");
@@ -122,6 +122,10 @@ async function createWindow (){
     win.on('unmaximize', () => { win.webContents.send('windowStatus', 'isRestored') });
     win.on('enter-full-screen', () => { win.webContents.send('windowStatus', 'isFullscreen') });
     win.on('leave-full-screen', () => { win.webContents.send('windowStatus', 'leaveFullscreen') });
+    win.on('app-command', (e, cmd) => {
+        cmd === 'browser-backward' && AppController.prev()
+        cmd === 'browser-forward' && AppController.next()
+    })
     win.webContents.once("did-finish-load", () => {
         AppController.updateWinFinishLoad(true)
     });

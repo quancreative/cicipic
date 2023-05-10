@@ -38,3 +38,18 @@ function onKeyUp (event) {
 
 window.addEventListener('keyup', onKeyUp, true)
 window.addEventListener('keydown', onKeyDown, true)
+window.addEventListener('mouseup', event => {
+    switch (event.button) {
+        case 3:
+            window.api.send("toMain", "onPrevImgBtnClick");
+            event.preventDefault()
+            break;
+        case 4:
+            window.api.nextImage(mainImg.src)
+            event.preventDefault()
+            break;
+        case 5:
+            event.preventDefault()
+            break;
+    }
+})
