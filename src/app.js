@@ -117,9 +117,11 @@ async function createWindow (){
     // });
 
     win = createMainWindow(path.join(__dirname, "renderers/index.html"));
-    win.on('closed', function(){
-        win = null;
-    });
+    win.on('closed', () => { win = null;  });
+    win.on('maximize', () => { win.webContents.send('windowStatus', 'isMaximized') });
+    win.on('unmaximize', () => { win.webContents.send('windowStatus', 'isRestored') });
+    win.on('enter-full-screen', () => { win.webContents.send('windowStatus', 'isFullscreen') });
+    win.on('leave-full-screen', () => { win.webContents.send('windowStatus', 'leaveFullscreen') });
     win.webContents.once("did-finish-load", () => {
         AppController.updateWinFinishLoad(true)
     });
@@ -163,6 +165,30 @@ ipcMain.on("toMain", (event, args) => {
         case 'OnEscape' :
             AppController.exitFullScreen()
             break;
+        case 'deleteImg' :
+            break;            
+        case 'miniApp' :
+            win.minimize()
+            break;
+        case 'maxRestoreApp' :
+            if(win.isMaximized()){
+                win.restore()
+            } else {
+                win.maximize()
+            }
+            break;
+        case 'maxApp' :
+            win.maximize()
+            break;
+        case 'restortApp' :
+            win.restore()
+            break;       
+        case 'maxApp' :
+            win.maximize()
+            break;   
+        case 'closeApp' :
+            win.close()
+            break;              
         case 'onFileBrowseClick' :
 
             break;

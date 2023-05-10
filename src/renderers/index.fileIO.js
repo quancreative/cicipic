@@ -3,7 +3,7 @@ function drop_handler(ev) {
     // Get the id of the target and add the moved element to the target's DOM
 
 }
-let dropArea = document.getElementById('main')
+let dropArea = document.getElementById('main-content')
 
 ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, e => {
