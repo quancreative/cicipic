@@ -38,6 +38,7 @@ contextBridge.exposeInMainWorld('api', {
     update: () => ipcRenderer.invoke('update'),
     nextImage: (currentImageSrc) => ipcRenderer.send('nextImage', currentImageSrc),
     onFileDrop: (files) => ipcRenderer.send('onFileDrop', files),
+    openFileExplorer: (path) => ipcRenderer.send('onFileExplorerClick', path),
     handleWindowStatus : (callback) => { ipcRenderer.on('windowStatus', callback) }
     // mainImgSrc: () => {
     //     let imgSrc = '';

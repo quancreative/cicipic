@@ -5,13 +5,49 @@ const ImageZoom = {
     zoomPercentElem : document.getElementById('zoom-percentage'),
     zoomElem : document.getElementById('main-img-zoom'),
     resizeOriginalElem : document.getElementById('resize-original'),
-    zoomToFitElem : document.getElementById('zoom-to-fit'),
+    zoomToFitElem : document.getElementById('zoom-to-fit'), // Button on the header
+    containerElem : document.getElementById('main-img-container'),
+    mainImgElem : document.getElementById('main-img'),
+    imageLoaded : false,
     init(){
         this.addEvents()
     },
-    reset(){
-        this.scale = 1
+    setScale(scaleVal = 1){
+        this.scale = scaleVal
         this.update()
+    },
+    checkImageLoaded(callback, tried = 1){
+        console.log('running tries: ', tried)
+        if(this.imageLoaded) {
+            return true;
+        } else {
+            if(tried < 10){
+                let mainImgElem = document.getElementById('main-img');
+                if(mainImgElem.complete && mainImgElem.naturalHeight !== 0){
+                    this.imageLoaded = true;
+                    callback()
+                    return;
+                } else {
+                    tried ++;
+                    setTimeout( () => this.checkImageLoaded(callback, tried), 50)
+                }
+            } else {
+                return;
+            }
+        }
+    },
+    startFresh(){
+        this.imageLoaded = false
+        this.mainImgElem.classList.add('d-none')
+        this.setScale(1)
+    },
+    setImageSrc(src){
+        this.startFresh()
+        this.mainImgElem.src = src;
+        this.checkImageLoaded(() => {
+            this.mainImgElem.classList.remove('d-none')
+            this.imageToFit()// If image larger then window, scale down and center it
+        })
     },
     update(){
         this.zoomElem.style.transform = `scale(${this.scale})`
@@ -30,30 +66,58 @@ const ImageZoom = {
             this.zoomToFitElem.classList.add('d-none')
             this.resizeOriginalElem.classList.remove('d-none')
         }
+    },
+    /**
+     * If image larger then window, scale down and center it
+     */
+    imageToFit() {
+        let maxWidth = this.mainImgElem.clientWidth;
+        let maxHeight = this.mainImgElem.clientHeight;
+        let containerWidth = this.containerElem.clientWidth
+        let containerHeigt = this.containerElem.clientHeight
+        let isImageBiggerThenContainer = containerWidth <= maxWidth && containerHeigt <= maxHeight;
+        if(isImageBiggerThenContainer){
+            let tempScale = Math.min(containerWidth/maxWidth, containerHeigt/maxHeight)
+            console.log('tempScale', tempScale)
+            this.setScale(tempScale)
 
+            let hhh = (this.containerElem.clientHeight / 2) - ((this.zoomElem.clientHeight * tempScale) / 2) ;
+            this.containerElem.scrollTop = hhh ;
+            let www = (this.containerElem.clientWidth / 2) - ((this.zoomElem.clientWidth * tempScale) / 2);
+            this.containerElem.scrollLeft = www / 2 ;
+        }
     },
     addEvents(){
+        this.mainImgElem.addEventListener('load ', e => {
+           console.log('image loaded')
+        })
+
+        window.addEventListener("load", event => {
+            let image =  document.getElementById('main-img');
+            let isLoaded = image.complete && image.naturalHeight !== 0;
+            console.log(isLoaded);
+        });
+
         document.getElementById('zoom-out').addEventListener('click', e => {
             e.preventDefault();
             if(this.zoomElem.getBoundingClientRect().width >= 100){
-                this.scale -= this.zoomIncrement
-                this.update()
+                this.setScale( this.scale -= this.zoomIncrement)
             }
         })
 
         document.getElementById('zoom-in').addEventListener('click', e => {
             e.preventDefault();
-            this.scale += this.zoomIncrement
-            this.update()
+            this.setScale(this.scale += this.zoomIncrement)
         })
 
         this.zoomToFitElem.addEventListener('click', e => {
             e.preventDefault();
+            this.imageToFit()
         })
 
         this.resizeOriginalElem.addEventListener('click', e => {
             e.preventDefault();
-            this.reset()
+            this.setScale(1)
         })
 
         document.addEventListener('wheel', e => {
@@ -126,42 +190,30 @@ const DragScroll = {
  * @se https://bobbyhadz.com/blog/javascript-intermediate-value-is-not-a-function#add-a-semicolon-at-the-beginning-of-the-line-on-which-the-error-occurred
  */
 ;(function () {
-    const imgFolder = document.getElementById('img-folder') // @ Image Info Side bar
-    const imgFilePath = document.getElementById('img-file-path') // @ Image Info Side bar
 
     let updateMainDisplay = (data) => {
         if(data.currentFile.hasOwnProperty('path'), data.currentFile.path){
             let imgSrc = data.currentFile.path
-            mainImg.src = imgSrc
+            ImageZoom.setImageSrc(imgSrc);
             document.getElementById('main-form').classList.add('d-none')
             document.getElementById('main-img-nav').classList.remove('d-none')
-            document.getElementById('img-filename').textContent = data.currentFile.name // @ <header />
-            document.getElementById('img-name').textContent = data.currentFile.name // @ Info side bar
-            imgFilePath.textContent = imgSrc // @ Info side bar
-            imgFilePath.href = `file:///${imgSrc}` // @ Info side bar
-            imgFolder.textContent = data.currentFile.pwd // @ Info side bar
-            imgFolder.href = data.currentFile.pwd
-            ImageZoom.reset();
+
         } else {
+            ImageZoom.clear();
             document.getElementById('main-form').classList.remove('d-none')
             document.getElementById('main-img-nav').classList.add('d-none')
-            document.getElementById('img-filename').textContent = ''
-            document.getElementById('img-name').textContent = ''
-            imgFilePath.textContent = '' // @ Info side bar
-            imgFolder.textContent = ''
-            imgFolder.href = ''
+            document.getElementById('header-img-filename').textContent = ''
+
         }
     }
 
     window.api.receive("fromMain", (data) => {
-        console.log(`Received ${data} from main process`, data);
         if (data.currentFile) {
             document.title = data.currentFile.path;
             updateMainDisplay(data);
         }
     });
 
-    ImageZoom.init();
-    DragScroll.init();
-
 })();
+ImageZoom.init();
+DragScroll.init();

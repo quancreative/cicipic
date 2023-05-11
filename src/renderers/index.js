@@ -57,6 +57,15 @@ window.api.receive("fromMain", (data) => {
     if (data.currentFile) {
         document.title = data.currentFile.path;
         updatePagination(data);
+
+        if(data.currentFile.hasOwnProperty('path'), data.currentFile.path){
+            let imgSrc = data.currentFile.path
+            document.getElementById('header-img-filename').textContent = data.currentFile.name // @ <header />
+        } else {
+            document.getElementById('header-img-filename').textContent = ''
+
+        }
+
     }
 });
 

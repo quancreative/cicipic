@@ -1,5 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem, ipcMain,shell, ipcRenderer, Tray, protocol, remote } = require("electron");
-const isImage = require('is-image')
+const { app, BrowserWindow, Menu, MenuItem, ipcMain, shell, ipcRenderer, Tray, protocol } = require("electron");
 const filesize = require('filesize')
 const {createMainWindow} = require('./components/window.js')
 const { devtool } = require('./components/devtools.js')
@@ -148,7 +147,12 @@ async function createWindow (){
             return fileObj;
         }
         func().then()
-        // AppController.next();
+
+        // Todo: Try code below for cleaner
+        // (async() => {
+        //     const fileObj = await getNextImageFile(decodeURI(currentDisplayImageSrc)); // Ex: Convert %20 to space
+        //     AppController.updateState(fileObj, 'updateMainImageSource', 'onNextImgBtnClick');
+        // })().catch(console.error)
     })
     return win
 }
@@ -204,6 +208,21 @@ ipcMain.on("toMain", (event, args) => {
         win.webContents.send("fromMain", stateChange);
     });
 });
+
+ipcMain.on('onFileExplorerClick', (event, path) => {
+    // @https://stackoverflow.com/a/43701801
+    fs.lstat(path, (err, stats) => {
+        if(err) return console.log(err); //Handle error
+        // console.log(`Is file: ${stats.isFile()}`);
+        // console.log(`Is directory: ${stats.isDirectory()}`);
+
+        // Show the given file in a file manager. If possible, select the file.
+        // if (stats.isFile()) shell.showItemInFolder(path)
+        if (stats.isFile()) shell.showItemInFolder(path)
+
+        if (stats.isDirectory()) shell.openPath(path)
+    });
+})
 
 let onCreatedWindow = (createdWin) => {
     // This is when user double click on a image file anywhere/any folder

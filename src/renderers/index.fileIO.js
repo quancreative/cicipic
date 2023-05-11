@@ -61,3 +61,25 @@ document.getElementById('file-browse-btn').addEventListener('change', e => {
         window.api.onFileDrop(fileInfoList)
     }
 })
+document.getElementById('open-file-dialog').addEventListener('change', e => {
+    const files = event.target.files;
+    let fileInfoList = [];
+    for (const file of files) {
+
+        // for(const property in file){
+        //     // console.log(`property = ${property}, value = ${file[property]}`);
+        // }
+        // Prevent error: Uncaught Error: An object could not be cloned.
+        fileInfoList.push({
+            name : file.name,
+            path : file.path,
+            size : file.size,
+            type : file.name,
+            lastModified: file.lastModified
+        })
+    }
+
+    if (fileInfoList.length) {
+        window.api.onFileDrop(fileInfoList)
+    }
+})

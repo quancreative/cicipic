@@ -8,6 +8,7 @@ header svg{fill: white;}
 header > .title-bar { -webkit-app-region: drag; }
 .title-btns > * {margin-left: 0.25rem; margin-right: 0.25rem; }
 h1{width: auto}
+#more-opts-menu{z-index: 1001; top: 36px;}
 main{ padding-top: 32px;}
 #main-content{  min-height: 500px; background-color: #1d222e; overflow: hidden;}
 #main-form{padding-top: 50px;}

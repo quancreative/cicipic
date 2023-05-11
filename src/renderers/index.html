@@ -12,11 +12,11 @@
 
 <header class="top-bar d-flex align-items-stretch w-100 align-items-center">
     <button id="menu" class="btn btn-dark btn-sm" title="More Options"><i class="fa-solid fa-ellipsis"></i></button>
-    <div class="title-bar flex-fill">
-        <h1 id="img-filename" class="mb-0 pt-2 fs-7 text-white"></h1>
+    <div class="title-bar flex-fill ms-1">
+        <h1 id="header-img-filename" class="mb-0 pt-2 fs-7 text-white"></h1>
     </div>
 
-    <div class="title-btns nav nav-pills ms-auto ">
+    <menu class="title-btns nav nav-pills mt-0 ms-auto ">
         <button id="fullscreen" class="btn btn-dark btn-sm" title="Fullscreen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
         <button id="zoom-to-fit" class="btn btn-dark btn-sm" title="Zoom To Fit"><i class="fa-solid fa-expand"></i></button>
         <button id="resize-original" class="btn btn-dark btn-sm d-none" title="Zoom To Actual Size"><i class="fa-solid fa-compress"></i></i></button>
@@ -29,8 +29,15 @@
         <button id="restore-win" class="btn btn-dark btn-sm" title="Restore"><i class="fa-regular fa-window-restore"></i></button>
         <button id="max-win" class="btn btn-dark btn-sm" title="Maximize"><i class="fa-regular fa-window-maximize"></i></button>
         <button id="close-win" class="btn btn-dark btn-sm" title="Close Application"><i class="fa-solid fa-xmark"></i></button>
-    </div>
+    </menu>
 </header>
+<div id="more-opts-menu" class="d-none d-flex align-items-stretch w-100 align-items-center position-absolute border">
+    <menu class="nav nav-pills mb-2">
+        <label class="btn btn-dark btn-sm mx-2"><i class="fa-regular fa-folder-open"></i>
+            <input id="open-file-dialog"  type="file" style="opacity: 0">
+        </label>
+    </menu>
+</div>
 
 <main class="d-flex flex-nowrap">
     <div id="main-content" class="flex-grow-1 position-relative ">
@@ -114,5 +121,6 @@
 <script src="index.fileIO.js"></script>
 <script src="index.header.js"></script>
 <script src="index.mainImage.js"></script>
+<script src="index.imageInfoSideBar.js"></script>
 
 </html>
