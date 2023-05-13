@@ -8,7 +8,8 @@ header svg{fill: white;}
 header > .title-bar { -webkit-app-region: drag; }
 .title-btns > * {margin-left: 0.25rem; margin-right: 0.25rem; }
 h1{width: auto}
-#more-opts-menu{z-index: 1001; top: 36px;}
+#more-opts-menu{ background-color: #4c576d; z-index: 1001; top: 40px; border-radius: 4px; }
+#more-opts-menu menu{}
 main{ padding-top: 32px;}
 #main-content{  min-height: 500px; background-color: #1d222e; overflow: hidden;}
 #main-form{padding-top: 50px;}
@@ -24,7 +25,8 @@ aside{background-color: #151920; color: #9ca3b3; overflow-y: auto;}
 .btn-round{    background: rgba(66,66,66,.54);    border-radius: 28px;    cursor: pointer;    /*position: absolute;*/    /*top: 50%;*/    /*margin-top: -28px;*/    height: 56px;    width: 56px;    color: #6188ff;}
 .btn-round.btn-sm{    height: 35px;    width: 35px;    padding: 0;}
 .pt-05 {padding-top: 0.125rem!important; }
-.me-6-5 {
-    margin-right: 4.5rem!important;
-}
+.me-6-5 {    margin-right: 4.5rem!important;}
 .fs-7{font-size: .75rem !important;}
+.popper-arrow,
+.popper-arrow::before {width: 10px;    height: 10px;    position: absolute;    z-index: -1;}
+.popper-arrow::before {    content: "";    transform: rotate(45deg);    background: rgb(76 87 109);    top: 0px;    left: 0px;}

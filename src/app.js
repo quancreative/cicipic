@@ -1,16 +1,14 @@
 const { app, BrowserWindow, Menu, MenuItem, ipcMain, shell, ipcRenderer, Tray, protocol } = require("electron");
-const filesize = require('filesize')
 const {createMainWindow} = require('./components/window.js')
 const { devtool } = require('./components/devtools.js')
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-const {readDir} = require("./components/readdir");
 const {getNextImageFile, getPrevImageFile, getFileInfoByPath, isFistFileOfTheList, isLastFileOfTheList} = require("./components/utilities");
 // const {createGlobalShortcut} = require("./components/globalShortcut");
 const log = require('electron-log');
-const {addFileWatch} = require("./components/io");
-const {notify} = require("./components/notification");
+// const {addFileWatch} = require("./components/io");
+// const {notify} = require("./components/notification");
 
 
 // fs.readFile(p, 'utf8', function (err, data) {
@@ -224,8 +222,10 @@ ipcMain.on('onFileExplorerClick', (event, path) => {
     });
 })
 
-let onCreatedWindow = (createdWin) => {
-    // This is when user double click on a image file anywhere/any folder
+/**
+ * This is when user double click on an external image file to open our app.
+ */
+let checkOpenedFile = () => {
     // console.log(createdWin);
     // @credit https://stackoverflow.com/a/70822261
     if (process.platform == 'win32' && process.argv.length >= 2) {
@@ -245,22 +245,20 @@ let onCreatedWindow = (createdWin) => {
 }
 
 let onWindReady = () => {
-    createWindow().then( onCreatedWindow).catch()
+    createWindow().then( checkOpenedFile).catch()
     
     // addFileWatch(win)
     log.info('process.argv', process.argv);
     
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow().then(onCreatedWindow).catch()
+            createWindow().then(checkOpenedFile).catch()
         }
     })
     
     registerIPCEvents()
     // createGlobalShortcut(AppController)
 }
-
-// app.whenReady().then(onWindReady)
 
 /**
  * Only one single instance. 
@@ -278,6 +276,7 @@ if (!gotTheLock) {
         if (win) {
             if (win.isMinimized()) win.restore()
             win.focus()
+            checkOpenedFile()
         }
     })
         

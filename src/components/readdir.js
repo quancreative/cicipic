@@ -1,8 +1,11 @@
-const isImage = require('is-image')
 const filesize = require('filesize')
 const fs = require('fs');
 const path = require("path");
 const folder = 'C:/Users/Quan/Pictures/';
+
+const isImage = (filename) => {
+    return filename.match(/\.(jpg|jpeg|png|gif)$/i)
+}
 
 let readDir = (file) => {
     let allFiles = [];

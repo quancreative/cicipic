@@ -31,12 +31,14 @@
         <button id="close-win" class="btn btn-dark btn-sm" title="Close Application"><i class="fa-solid fa-xmark"></i></button>
     </menu>
 </header>
-<div id="more-opts-menu" class="d-none d-flex align-items-stretch w-100 align-items-center position-absolute border">
-    <menu class="nav nav-pills mb-2">
-        <label class="btn btn-dark btn-sm mx-2"><i class="fa-regular fa-folder-open"></i>
+<div id="more-opts-menu" class="d-none d-flex mx-2 align-items-stretch w-100 align-items-center position-absolute ">
+    <menu class="nav nav-pills mb-3">
+        <label class="btn btn-dark btn-sm mx-3" style="width: 34px; height: 32px;">
+            <i class="fa-regular fa-folder-open"></i>
             <input id="open-file-dialog"  type="file" style="opacity: 0">
         </label>
     </menu>
+    <div class="popper-arrow" style="position: absolute; top: -6px; left: -35px; transform: translate(40px, 0px);"></div>
 </div>
 
 <main class="d-flex flex-nowrap">
@@ -93,7 +95,7 @@
             <i class="fa-regular fa-folder pe-3 pt-1" title="File Path"></i>
             <div>
                 <h6>File Path</h6>
-                <a id="img-file-path" href=""></a>
+                <a id="img-file-path" href="" title="Open In File Explorer"></a>
                 <i class="fa-regular fa-copy" title="Copy file path to Clipboard"></i>
             </div>
         </div>
@@ -101,7 +103,7 @@
             <i class="fa-regular fa-folder pe-3 pt-1" title="File Path"></i>
             <div>
                 <h6>Folder Path</h6>
-                <a id="img-folder" href=""></a>
+                <a id="img-folder" href="" title="Open In File Explorer"></a>
                 <i class="fa-regular fa-copy" title="Copy file path to Clipboard"></i>
             </div>
         </div>

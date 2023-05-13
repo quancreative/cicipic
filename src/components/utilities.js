@@ -1,9 +1,8 @@
-const isImage = require('is-image')
 const path = require('path');
 const isNumeric = (num) => (typeof(num) === 'number' || typeof(num) === "string" && num.trim() !== '') && !isNaN(num);
-const fs = require('fs/promises');
-const filesize = require('filesize')
-
+const fsPromises = require('fs/promises');
+const fs = require('fs');
+const {filesize} = require('filesize')
 
 const getFilenameOfPath = (src) => {
     // let filename = src.replace(/^.*[\\\/]/, '');
@@ -12,6 +11,10 @@ const getFilenameOfPath = (src) => {
     // console.log('filename', filename);
     // console.log('path.basename filename', path.basename(src));
     return filename;
+}
+
+const isImage = (filename) => {
+    return filename.match(/\.(jpg|jpeg|png|gif)$/i)
 }
 
 /**
@@ -37,6 +40,24 @@ let constructFileInfo = async (fileInfo = {}) => {
     }
 
     if(!fileInfo.hasOwnProperty('size') || !fileInfo.size){
+        let stats = fs.statSync(fileInfo.path)
+        fileInfo.stats = stats
+        fileInfo.size = filesize(stats.size, {round: 0})
+
+
+        // ;(async () => {
+        //     try {
+        //
+        //         // Using the fsPromises.stat() method
+        //         const stats = await fsPromises.stat(
+        //             "GeeksforGeeks.txt");
+        //         console.log(stats);
+        //     }
+        //     catch (error) {
+        //         console.log(error);
+        //     }
+        // })().catch();
+
         // let stats = fs.statSync(fileInfo.path)
         // fileInfo.size = filesize(stats.size, {round: 0})
     }
@@ -58,13 +79,29 @@ let getAllImagesInFolderByImgSrc = async(imgSrc) => {
     let images = [];
     let src = imgSrc.replace('file:///', '')
     let folder =  path.dirname(src)
-    const dir = await fs.readdir(folder)
+    const dir = await fsPromises.readdir(folder)
     for (const filename of dir) {
         if (isImage(filename)) {
             let fileSrc = `${folder}/${filename}`
             images.push( {name: filename, path: fileSrc})
         }
-      }
+    }
+
+
+    // Only works if const fs = require('fs')
+    // fs.readdir(src, (err, files) => {
+    //     if (err)
+    //         console.log(err);
+    //     else {
+    //         console.log("\nCurrent directory filenames:");
+    //         files.forEach(filename => {
+    //             if (isImage(filename)) {
+    //                 let fileSrc = `${folder}/${filename}`
+    //                 images.push( {name: filename, path: fileSrc})
+    //             }
+    //         })
+    //     }
+    // })
 
     return images;
 }
